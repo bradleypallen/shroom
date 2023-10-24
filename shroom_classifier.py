@@ -144,6 +144,7 @@ Answer:
         Determines whether or not the output (hyp) is a hallucination.
         
         Parameters:
+            task: The task associated with a datapoint. One of "DM", "PG", "MT", or "TS".
             src: The input passed to a model.
             tgt: The intended reference "gold" text that the model ought to generate
             hyp: The output the model generated.

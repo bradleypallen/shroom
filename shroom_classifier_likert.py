@@ -70,8 +70,10 @@ Output: {hyp}
 Rationale: {rationale}
 
 Now using the argument provided in the above rationale, answer the question: is the output a hallucination? 
-Answer 'Hallucination' if the output is a hallucination, or 'Not Hallucination' is not a hallucination. Only answer 
-'Hallucination' or 'Not Hallucination'.
+Answer by choosing one of the following options, depending of the level of certainty of 
+the argument that the output is a hallucination: "Strongly Agree", "Agree", "Slightly Agree", 
+"Slightly Disagree", "Disagree", and "Strongly Disagree". Only answer "Strongly Agree", "Agree", 
+"Slightly Agree", "Slightly Disagree", "Disagree", or "Strongly Disagree".
   
 Answer:
 """

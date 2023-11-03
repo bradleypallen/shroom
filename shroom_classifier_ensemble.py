@@ -32,9 +32,9 @@ Persona: {persona}
 {task}  
 You have been provided with the above input and output pair, as well as a target that you need to use 
 to determine if the output is correct and accurate, or if it is a hallucination, defined as an output 
-that is incorrect, off point, or contains information that cannot be reasonably inferred from the input. 
+that is incorrect, off point, or contains extraneous information that cannot be reasonably inferred from the input. 
 Provide a succinct rationale arguing for or against the assertion that the output is a hallucination, 
-based on your expertise as {persona_desc}.
+based on your expertise as {persona_desc}, restricting yourself to judgments solely within your expertise.
 
 Rationale:
 """

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from langchain import HuggingFaceHub, OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain, SequentialChain
@@ -26,20 +27,22 @@ class ShroomEnsembleClassifier:
     RATIONALE_GENERATION_PROMPT = """Input: {src}
 Target: {tgt} 
 Output: {hyp}
+Persona: {persona}
 
 {task}  
 You have been provided with the above input and output pair, as well as a target that you need to use 
 to determine if the output is correct and accurate, or if it is a hallucination, defined as an output 
 that is incorrect, off point, or contains information that cannot be reasonably inferred from the input. 
-Provide a rationale arguing for or against the assertion that the output is a hallucination, in the style
-of {persona}.
-    
+Provide a succinct rationale arguing for or against the assertion that the output is a hallucination, 
+based on your expertise as {persona_desc}.
+
 Rationale:
 """
 
     ANSWER_GENERATION_PROMPT = """Input: {src}
 Target: {tgt} 
 Output: {hyp}
+Persona: {persona}
 Rationale: {rationale}
 
 Now using the argument provided in the above rationale, answer the question: is the output a hallucination? 
@@ -88,7 +91,7 @@ Answer:
         rationale_generation = LLMChain(
             llm=self.llm,
             prompt=PromptTemplate(
-                input_variables=[ "task", "persona", "src", "tgt", "hyp"], 
+                input_variables=[ "task", "persona", "persona_desc", "src", "tgt", "hyp"], 
                 template=self.RATIONALE_GENERATION_PROMPT
             ), 
             output_key="rationale"
@@ -96,15 +99,15 @@ Answer:
         answer_generation = LLMChain(
             llm=self.llm, 
             prompt=PromptTemplate(
-                input_variables=["src", "tgt", "hyp", "rationale"], 
+                input_variables=["src", "tgt", "hyp", "persona", "rationale"], 
                 template=self.ANSWER_GENERATION_PROMPT
             ), 
             output_key="label"
         )
         return SequentialChain(
             chains=[rationale_generation, answer_generation],
-            input_variables=["task", "persona", "src", "tgt", "hyp"],
-            output_variables=["rationale", "label"]
+            input_variables=["task", "persona", "persona_desc", "src", "tgt", "hyp"],
+            output_variables=["persona", "rationale", "label"]
         )
     
     def classify(self, task, src, tgt, hyp):
@@ -113,14 +116,25 @@ Answer:
         
         Parameters:
             task: The task associated with a datapoint. One of "DM", "PG", "MT", or "TS".
+            persona: The name of the persona used by the LM in generating the rationale.
+            persona_desc: The description of the persona.
             src: The input passed to a model.
             tgt: The intended reference "gold" text that the model ought to generate
             hyp: The output the model generated.
         
         Returns:
-            A list of dicts, each dict containing a classification of the output based on the task, persona, input, output and target.
+            A dict containing a classification of the output based on the task, persona, input, output and target.
         """
-        classifications = [ self._classify_chain({ "task": self.TASK[task], "persona": self.PERSONA[persona], "src": src, "tgt": tgt, "hyp": hyp }) for persona in self.PERSONA ]
+        classifications = [ 
+            self._classify_chain({ 
+                "task": self.TASK[task], 
+                "persona": persona, 
+                "persona_desc": self.PERSONA[persona], 
+                "src": src, 
+                "tgt": tgt, 
+                "hyp": hyp 
+            }) for persona in self.PERSONA 
+        ]
         predictions = [ classification["label"] for classification in classifications ]
         weight = 1./float(len(predictions))
         rationale = [ classification["rationale"] for classification in classifications ]
@@ -129,9 +143,12 @@ Answer:
             predicted = "Hallucination"
         else:
             predicted = "Not Hallucination"
-        return {
+        output = {
             "predictions": predictions,
             "predicted": predicted,
-            "rationales": rationale,
             "predicted_p": predicted_p,
+            "timestamp": datetime.utcnow().isoformat(timespec="seconds") + 'Z'
         }
+        for classification in classifications:
+            output[f'{classification["persona"]}_r'] = classification["rationale"]
+        return output

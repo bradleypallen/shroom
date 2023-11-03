@@ -11,7 +11,7 @@ Given a datapoint from the validation data, we prompt GPT-4 using a zero-shot ch
 
 | Classifier | Dataset | Run Notebook | Classification Results | Analysis Notebook |
 | ---------- | ------- | ------------ | ---------------------- | ----------------- |
-| [shroom_classifier_ensemble.py](https://github.com/bradleypallen/shroom/blob/e5ee7add48226c94ec1a53f30400c6a985ccb716/shroom_classifier_ensemble.py) | [train-v1.json](https://github.com/bradleypallen/shroom/blob/e5ee7add48226c94ec1a53f30400c6a985ccb716/trial-v1.json) | [shroom_experiment_trial-v1_ensemble.ipynb](https://github.com/bradleypallen/shroom/blob/e5ee7add48226c94ec1a53f30400c6a985ccb716/shroom_experiment_trial-v1_ensemble.ipynb) | [results_trial-v1_ensemble_version_4.json](https://github.com/bradleypallen/shroom/blob/e5ee7add48226c94ec1a53f30400c6a985ccb716/results_trial-v1_ensemble_version_5.json) | [shroom_trial-v1_metrics_ensemble.ipynb](https://github.com/bradleypallen/shroom/blob/e5ee7add48226c94ec1a53f30400c6a985ccb716/shroom_trial-v1_metrics_ensemble.ipynb) |
+| [shroom_classifier_ensemble.py](shroom_classifier_ensemble.py) | [train-v1.json](trial-v1.json) | [shroom_experiment_trial-v1_ensemble.ipynb](shroom_experiment_trial-v1_ensemble.ipynb) | [results_trial-v1_ensemble_version_4.json](results_trial-v1_ensemble_version_5.json) | [shroom_trial-v1_metrics_ensemble.ipynb](shroom_trial-v1_metrics_ensemble.ipynb) |
 
 
 ## Requirements

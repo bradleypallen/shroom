@@ -46,7 +46,7 @@ Answer:
     
     def __init__(self, model_name="gpt-4", temperature=0.1):
         """
-        Initializes a classifier for the SemEval 2024 Task 6, "".
+        Initializes a classifier for the SemEval 2024 Task 6, "SHROOM, a Shared-task on Hallucinations and Related Observable Overgeneration Mistakes".
         
         Parameters:
             model_name: The name of the model to be used for zero shot CoT classification (default "gpt-4").
@@ -61,6 +61,7 @@ Answer:
         if model_name in [
             "gpt-4",
             "gpt-3.5-turbo",
+            "gpt-4-1106-preview",
             ]:
             return ChatOpenAI(model_name=model_name, temperature=temperature, request_timeout=50)
         elif model_name in [
@@ -114,7 +115,7 @@ Answer:
             ref: The field(s) containing the semantic information used to determine if the input is a hallucination. One of "src", "tgt", or "either".
        
         Returns:
-            A dict containing a classification of the output based on the task, persona, input, output and target.
+            A dict containing a classification of the output based on the task, reference, input, output and target.
         """
         classifications = [ 
             self._classify_chain({ 

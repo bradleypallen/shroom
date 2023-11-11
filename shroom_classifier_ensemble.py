@@ -69,6 +69,7 @@ Answer:
         if model_name in [
             "gpt-4",
             "gpt-3.5-turbo",
+            "gpt-4-1106-preview",
             ]:
             return ChatOpenAI(model_name=model_name, temperature=temperature, request_timeout=100)
         elif model_name in [

@@ -43,7 +43,7 @@ Output: {hyp}
 Rationale: {rationale}
 
 Now using the argument provided in the above rationale, answer the question: is the output a hallucination? 
-Answer 'Hallucination' if the output is a hallucination, or 'Not Hallucination' is not a hallucination. Only answer 
+Answer 'Hallucination' if the output is a hallucination, or 'Not Hallucination' if it is not a hallucination. Only answer 
 'Hallucination' or 'Not Hallucination'.
   
 Answer:

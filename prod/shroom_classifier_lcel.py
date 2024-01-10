@@ -135,4 +135,4 @@ Answer:
             predicted = "Hallucination"
         else:
             predicted = "Not Hallucination"
-        return { "label": predicted, "p(Hallucination)": predicted_p }
+        return { "id": dp["id"], "label": predicted, "p(Hallucination)": predicted_p }

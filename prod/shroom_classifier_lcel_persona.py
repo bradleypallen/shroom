@@ -8,23 +8,32 @@ from langchain_core.output_parsers import StrOutputParser
 class ShroomClassifier:
     """Represents a classifier for the SHROOM evaluation dataset."""
 
-    TASK = {
-        "DM": "The given task is Definition Modeling, meaning that the goal of the language model is to generate a definition for the term between the '<define>' and '</define>' delimiters in the input.",
-        "PG": "The given task is Paraphrase Generation, meaning that the goal of the language model is to generate a paraphrase of the input.",
-        "MT": "The given task is Machine Translation, meaning that the goal of the language model is to generate a natural language translation of the input.",
-        "TS": "The given task is Text Simplification, meaning that the goal of the language model is to generate a simplified version of the input.",
+    PERSONA = {
+        "translator": "a translator concerned that the output is a good translation",
+        "lexicographer": "a lexicographer concerned that the output is describing the meaning of the word",
+        "editor": "an editor concerned that the output is understandable",
+        "writer": "a creative writer concerned that the output is engaging",
+        "grammarian": "a grammarian concerned that the output is grammatical",
+        "lawyer": "a lawyer concerned that the output is truthful",
     }
 
-    RATIONALE_GENERATION_PROMPT = """Input: {src}
+    TASK = {
+        "DM": "Your given task is Definition Modeling, meaning that the goal of the language model is to generate a definition for the term between the '<define>' and '</define>' delimiters in the input.",
+        "PG": "Your given task is Paraphrase Generation, meaning that the goal of the language model is to generate a paraphrase of the input.",
+        "MT": "Your given task is Machine Translation, meaning that the goal of the language model is to generate a natural language translation of the input.",
+        "TS": "Your given task is Text Simplification, meaning that the goal of the language model is to generate a simplified version of the input.",
+    }
+
+    RATIONALE_GENERATION_PROMPT = """{task}  
+You are provided with an input and output pair, as well as a target that you need to use
+to determine if the output is correct and accurate, or if it is a hallucination, defined as an output
+that is incorrect, off point, or contains extraneous information that cannot be reasonably inferred from the input.
+Provide a succinct rationale arguing for or against the assertion that the output is a hallucination,
+based on your expertise as {persona}, restricting yourself to judgments solely within your expertise.
+
+Input: {src}
 Target: {tgt} 
 Output: {hyp}
-
-{task}  
-You have been provided with the above input and output pair, as well as a target that you need to use 
-to determine if the output is correct and accurate, or if it is a hallucination, defined as an output 
-that is incorrect, off point, or contains extraneous information that cannot be reasonably inferred from the input. 
-Provide a succinct rationale arguing for or against the assertion that the output is a hallucination.
-
 Rationale:
 """
 
@@ -60,6 +69,15 @@ Answer:
             "gpt-4-1106-preview",
             ]:
             return ChatOpenAI(model_name=model_name, temperature=temperature, request_timeout=100)
+        # elif model_name in [
+        #     "gpt-3.5-turbo-instruct"
+        #     ]:
+        #     return OpenAI(model_name=model_name, temperature=temperature, request_timeout=100)
+        # elif model_name in [
+        #     "meta-llama/Llama-2-70b-chat-hf", 
+        #     "google/flan-t5-xxl",
+        #     ]:
+        #     return HuggingFaceHub(repo_id=model_name, model_kwargs={ "temperature": temperature })
         else:
             raise Exception(f'Model {model_name} not supported')
 
@@ -103,10 +121,11 @@ Answer:
             [
                 { 
                     "task": self.TASK[dp["task"]], 
+                    "persona": self.PERSONA[persona], 
                     "src": dp["src"], 
                     "tgt": dp["tgt"], 
                     "hyp": dp["hyp"] 
-                } for i in range(5) 
+                } for persona in self.PERSONA 
             ]
         )
         weight = 1./float(len(predictions))

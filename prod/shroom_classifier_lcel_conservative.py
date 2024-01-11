@@ -15,34 +15,36 @@ class ShroomClassifier:
         "TS": "The given task is Text Simplification, meaning that the goal of the language model is to generate a simplified version of the input.",
     }
 
-    RATIONALE_GENERATION_PROMPT = """Input: {src}
+    RATIONALE_GENERATION_PROMPT = """A language model has generated an output from a given input for a specific task.
+{task}
+You have been provided with an input and output pair, as well as a target that you need to use 
+to determine if the output is a hallucination. A hallucination is defined as an output 
+that is factually incorrect, off point, or contains extra information that cannot be reasonably 
+inferred from the input. Provide a succinct rationale arguing for or against the assertion that 
+the output is a hallucination.
+
+Input: {src}
 Target: {tgt} 
 Output: {hyp}
-
-{task}  
-You have been provided with the above input and output pair, as well as a target that you need to use 
-to determine if the output is correct and accurate, or if it is a hallucination, defined as an output 
-that is incorrect, off point, or contains extraneous information that cannot be reasonably inferred from the input. 
-Provide a succinct rationale arguing for or against the assertion that the output is a hallucination.
-
 Rationale:
 """
 
-    ANSWER_GENERATION_PROMPT = """Input: {src}
+    ANSWER_GENERATION_PROMPT = """Using the argument provided in the below rationale, answer the question: 
+is the output a hallucination? Answer 'Hallucination' if the output is a hallucination, or 'Not Hallucination' 
+if it is not a hallucination. Be conservative: if there is any indication that the output is factually incorrect, 
+off point, or contains extra information that cannot be reasonably inferred from the input, consider it to be a hallucination.
+Only answer 'Hallucination' or 'Not Hallucination'.
+  
+Input: {src}
 Target: {tgt} 
 Output: {hyp}
 Rationale: {rationale}
-
-Now using the argument provided in the above rationale, answer the question: is the output a hallucination? 
-Answer 'Hallucination' if the output is a hallucination, or 'Not Hallucination' if it is not a hallucination. Only answer 
-'Hallucination' or 'Not Hallucination'.
-  
 Answer:
 """
     
     def __init__(self, model_name="gpt-4", temperature=0.1):
         """
-        Initializes a classifier for the SemEval 2024 Task 6, "".
+        Initializes a classifier for the SemEval 2024 Task 6.
         
         Parameters:
             model_name: The name of the model to be used for zero shot CoT classification (default "gpt-4").
@@ -97,18 +99,9 @@ Answer:
             hyp: The output the model generated.
         
         Returns:
-            A dict containing a classification of the output based on the task, persona, input, output and target.
+            A dict containing a classification of the output based on the task, input, output and target.
         """
-        predictions = self.chain.batch(
-            [
-                { 
-                    "task": self.TASK[dp["task"]], 
-                    "src": dp["src"], 
-                    "tgt": dp["tgt"], 
-                    "hyp": dp["hyp"] 
-                } for i in range(5) 
-            ]
-        )
+        predictions = self.chain.batch([ { "task": self.TASK[dp["task"]], "src": dp["src"], "tgt": dp["tgt"], "hyp": dp["hyp"] } for i in range(5) ])
         weight = 1./float(len(predictions))
         predicted_p = float(sum([ weight for prediction in predictions if prediction == 'Hallucination' ]))
         if predicted_p > 0.5:

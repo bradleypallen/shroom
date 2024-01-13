@@ -15,7 +15,7 @@ class ShroomClassifier:
         "TS": "The given task is Text Simplification, meaning that the goal of the language model is to generate a simplified version of the input.",
     }
 
-    RATIONALE_GENERATION_PROMPT = """A language model has generated an output from a given input for a specific task.
+    ANSWER_GENERATION_PROMPT = """A language model has generated an output from a given input for a specific task.
 {task} You will be given three inputs: input text, target text, and generated text.
 You are asked to evaluate the generated text looking at the input text and the target text. Then, you need to decide whether the generated text is a hallucination or not.
 There are two criteria for hallucination:
@@ -26,21 +26,11 @@ Now, it is time to look at the inputs.
 Input text: {src}
 Target text: {tgt}
 Generated text: {hyp}
-Is the generated text a hallucination? Answer "Yes" or "No", provide a short rationale for your answer.
-Rationale:
-"""
-
-    ANSWER_GENERATION_PROMPT = """Using the argument provided in the below rationale, answer the question: 
-is the output a hallucination? Answer 'Hallucination' if the output is a hallucination, or 'Not Hallucination' 
+Is the generated text a hallucination? Answer 'Hallucination' if the output is a hallucination, or 'Not Hallucination' 
 if it is not a hallucination. Only answer 'Hallucination' or 'Not Hallucination'.
-  
-Input: {src}
-Target: {tgt} 
-Output: {hyp}
-Rationale: {rationale}
 Answer:
 """
-    
+
     def __init__(self, model_name="gpt-4", temperature=0.1):
         """
         Initializes a classifier for the SemEval 2024 Task 6.
@@ -69,23 +59,11 @@ Answer:
         Creates a  LCEL chain that implements a zero-shot
         chain of thought (CoT) using a specification. 
         """
-        rationale_generation = (
-            ChatPromptTemplate.from_template(self.RATIONALE_GENERATION_PROMPT) 
+        return (
+            ChatPromptTemplate.from_template(self.ANSWER_GENERATION_PROMPT) 
             | self.llm 
             | StrOutputParser()
         )
-        answer_generation = (
-             { 
-                "rationale": rationale_generation, 
-                "hyp": itemgetter("hyp"),
-                "src": itemgetter("src"),
-                "tgt": itemgetter("tgt"),
-             }
-             | ChatPromptTemplate.from_template(self.ANSWER_GENERATION_PROMPT)
-             | self.llm
-             | StrOutputParser()
-        )
-        return answer_generation
     
     def classify(self, dp):
         """

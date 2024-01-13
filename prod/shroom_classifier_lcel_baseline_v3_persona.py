@@ -8,6 +8,13 @@ from langchain_core.output_parsers import StrOutputParser
 class ShroomClassifier:
     """Represents a classifier for the SHROOM evaluation dataset."""
 
+    PERSONA = {
+        "MT": "a translator concerned that the output is a good and accurate translation",
+        "DM": "a lexicographer concerned that the output accurately captures the meaning of the word being defined",
+        "TS": "an editor concerned that the output is short and simple",
+        "PG": "an author concerned that the output is an accurate paraphrase that does not distort the meaning of the input",
+    }
+
     TASK = {
         "DM": "The given task is Definition Modeling, meaning that the goal of the language model is to generate a definition for the term between the '<define>' and '</define>' delimiters in the input.",
         "PG": "The given task is Paraphrase Generation, meaning that the goal of the language model is to generate a paraphrase of the input.",
@@ -16,7 +23,7 @@ class ShroomClassifier:
     }
 
     RATIONALE_GENERATION_PROMPT = """A language model has generated an output from a given input for a specific task.
-{task} You will be given three inputs: input text, target text, and generated text.
+{task} You are {persona}. You will be given three inputs: input text, target text, and generated text.
 You are asked to evaluate the generated text looking at the input text and the target text. Then, you need to decide whether the generated text is a hallucination or not.
 There are two criteria for hallucination:
 - If the generated text contains any nonsensical or factually incorrect information, it is a hallucination.
@@ -26,7 +33,7 @@ Now, it is time to look at the inputs.
 Input text: {src}
 Target text: {tgt}
 Generated text: {hyp}
-Is the generated text a hallucination? Answer "Yes" or "No", provide a short rationale for your answer.
+Is the generated text a hallucination? Provide a short rationale for your answer.
 Rationale:
 """
 
@@ -100,7 +107,14 @@ Answer:
         Returns:
             A dict containing a classification of the output based on the task, input, output and target.
         """
-        predictions = self.chain.batch([ { "task": self.TASK[dp["task"]], "src": dp["src"], "tgt": dp["tgt"], "hyp": dp["hyp"] } for i in range(5) ])
+        predictions = self.chain.batch([ 
+            { 
+                "task": self.TASK[dp["task"]], 
+                "persona": self.PERSONA[dp["task"]], 
+                "src": dp["src"], 
+                "tgt": dp["tgt"], 
+                "hyp": dp["hyp"] 
+            } for i in range(5) ])
         weight = 1./float(len(predictions))
         predicted_p = float(sum([ weight for prediction in predictions if prediction == 'Hallucination' ]))
         if predicted_p > 0.5:

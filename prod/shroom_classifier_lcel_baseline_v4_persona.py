@@ -6,17 +6,17 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 class ShroomClassifier:
-    """Represents a classifier for the SHROOM evaluation dataset."""
+    """A classifier for the SHROOM validation and test datasets."""
 
     PERSONA = {
         "MT": "a translator concerned that the output is a good and accurate translation",
-        "DM": "a lexicographer concerned that the output accurately captures the meaning of the word being defined",
+        "DM": "a lexicographer concerned that the output accurately captures the meaning of the term between the '<define>' and '</define>' delimiters in the input",
         "TS": "an editor concerned that the output is short and simple",
         "PG": "an author concerned that the output is an accurate paraphrase that does not distort the meaning of the input",
     }
 
     TASK = {
-        "DM": "The given task is Definition Modeling, meaning that the goal of the language model is to generate a definition for the term between the '<define>' and '</define>' delimiters in the input.",
+        "DM": "The given task is Definition Modeling, meaning that the goal of the language model is to generate a definition for a specific term in the input.",
         "PG": "The given task is Paraphrase Generation, meaning that the goal of the language model is to generate a paraphrase of the input.",
         "MT": "The given task is Machine Translation, meaning that the goal of the language model is to generate a natural language translation of the input.",
         "TS": "The given task is Text Simplification, meaning that the goal of the language model is to generate a simplified version of the input.",
@@ -49,7 +49,7 @@ Answer:
         self.model_name = model_name
         self.temperature = temperature
         self.llm = self._llm(model_name, temperature)
-        self.chain = self._zero_shot_chain_of_thought()
+        self.chain = self._chain()
 
     def _llm(self, model_name, temperature):
         if model_name in [
@@ -61,7 +61,7 @@ Answer:
         else:
             raise Exception(f'Model {model_name} not supported')
 
-    def _zero_shot_chain_of_thought(self):
+    def _chain(self):
         """
         Creates a  LCEL chain that implements a zero-shot
         chain of thought (CoT) using a specification. 
@@ -72,26 +72,23 @@ Answer:
             | StrOutputParser()
         )
     
-    def classify(self, dp):
+    def classify(self, datapoint):
         """
         Determines whether or not the output (hyp) is a hallucination.
         
         Parameters:
-            task: The task associated with a datapoint. One of "DM", "PG", "MT", or "TS".
-            src: The input passed to a model.
-            tgt: The intended reference "gold" text that the model ought to generate
-            hyp: The output the model generated.
+            datapoint: A datapoint from the SHROOM dataset.
         
         Returns:
             A dict containing a classification of the output based on the task, input, output and target.
         """
         predictions = self.chain.batch([ 
             { 
-                "task": self.TASK[dp["task"]], 
-                "persona": self.PERSONA[dp["task"]], 
-                "src": dp["src"], 
-                "tgt": dp["tgt"], 
-                "hyp": dp["hyp"] 
+                "task": self.TASK[datapoint["task"]], 
+                "persona": self.PERSONA[datapoint["task"]], 
+                "src": datapoint["src"], 
+                "tgt": datapoint["tgt"], 
+                "hyp": datapoint["hyp"] 
             } for i in range(5) ])
         weight = 1./float(len(predictions))
         predicted_p = float(sum([ weight for prediction in predictions if prediction == 'Hallucination' ]))
@@ -99,7 +96,7 @@ Answer:
             predicted = "Hallucination"
         else:
             predicted = "Not Hallucination"
-        if "id" in dp:
-            return { "id": dp["id"], "label": predicted, "p(Hallucination)": predicted_p }
+        if "id" in datapoint:
+            return { "id": datapoint["id"], "label": predicted, "p(Hallucination)": predicted_p }
         else:
             return { "label": predicted, "p(Hallucination)": predicted_p }

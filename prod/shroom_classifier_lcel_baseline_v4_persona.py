@@ -43,7 +43,7 @@ Answer:
         Initializes a classifier for the SemEval 2024 Task 6.
         
         Parameters:
-            model_name: The name of the model to be used for zero shot CoT classification (default "gpt-4").
+            model_name: The name of the model to be used for classification (default "gpt-4").
             temperature: The temperature parameter for the model (default 0.1).
          """
         self.model_name = model_name
@@ -52,6 +52,16 @@ Answer:
         self.chain = self._chain()
 
     def _llm(self, model_name, temperature):
+        """
+        Initializes a model for use in classification. 
+
+        Parameters:
+            model_name: The name of the model to be used for classification.
+            temperature: The temperature parameter for the model.
+
+        Returns:
+            An LCEL model.
+        """
         if model_name in [
             "gpt-4",
             "gpt-3.5-turbo",
@@ -63,8 +73,10 @@ Answer:
 
     def _chain(self):
         """
-        Creates a  LCEL chain that implements a zero-shot
-        chain of thought (CoT) using a specification. 
+        Creates an LCEL chain. 
+
+        Returns:
+            An LCEL chain.
         """
         return (
             ChatPromptTemplate.from_template(self.ANSWER_GENERATION_PROMPT) 
@@ -74,7 +86,8 @@ Answer:
     
     def classify(self, datapoint):
         """
-        Determines whether or not the output (hyp) is a hallucination.
+        Determines whether or not the output (hyp) is a hallucination, and 
+        produces an estimate of the probability thatthe output is a hallucination.
         
         Parameters:
             datapoint: A datapoint from the SHROOM dataset.

@@ -9,10 +9,10 @@ class ShroomClassifier:
     """A classifier for the SHROOM validation and test datasets."""
 
     PERSONA = {
-        "MT": "a translator concerned that the output is a good and accurate translation",
-        "DM": "a lexicographer concerned that the output accurately captures the meaning of the term between the '<define>' and '</define>' delimiters in the input",
-        "TS": "an editor concerned that the output is short and simple",
-        "PG": "an author concerned that the output is an accurate paraphrase that does not distort the meaning of the input",
+        "MT": "a translator concerned that the generated text is a good and accurate translation of the input text",
+        "DM": "a lexicographer concerned that the generated text accurately captures the meaning of the term between the '<define>' and '</define>' delimiters in the input text",
+        "TS": "an editor concerned that the generated text is short, simple, and has the same meaning as the input text",
+        "PG": "an author concerned that the generated text is an accurate paraphrase that does not distort the meaning of the input text",
     }
 
     TASK = {
@@ -30,7 +30,7 @@ class ShroomClassifier:
 
     ANSWER_GENERATION_PROMPT = """A language model has generated an output from a given input for a specific task.
 {task} You are {persona}. You will be given three inputs: input text, target text, and generated text.
-You are asked to evaluate the generated text looking at the {ref} text. 
+You are asked to evaluate the generated text looking at {ref} text. 
 Then, you need to decide whether the generated text is a hallucination or not.
 There are two criteria for hallucination:
 - If the generated text contains any nonsensical or factually incorrect information, it is a hallucination.
@@ -109,7 +109,7 @@ Answer:
                 "src": datapoint["src"], 
                 "tgt": datapoint["tgt"], 
                 "hyp": datapoint["hyp"],
-                "ref": datapoint["ref"],
+                "ref": self.REFERENCE[datapoint["ref"]],
             } for i in range(10) ])
         weight = 1./float(len(predictions))
         predicted_p = float(sum([ weight for prediction in predictions if prediction == 'Hallucination' ]))

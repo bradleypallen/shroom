@@ -22,6 +22,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | v4-persona | v4 with personas re-added (one per task) | [shroom_classifier_v4_persona.py](prod/shroom_classifier_v4_persona.py) |
 | v5 | Increased temperature sampling to 10 | [shroom_classifier_v5.py](prod/shroom_classifier_v5.py) |
 | v6 | Added reference instruction (whether to use target, input, or both to determine if output is a hallucination) | [shroom_classifier_v6.py](prod/shroom_classifier_v6.py) |
+| v7 | Rearranged prompt to make it possible to insert demonstrations | [shroom_classifier_v7.py](prod/shroom_classifier_v7.py) |
 
 ## Runs
 
@@ -47,6 +48,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-16 | v1-persona-examples | gpt-3.5-turbo      |           0.7 |       0.665331 |       0.490591 |    0.720559 |    0.509126 |  0.692945 |  0.499859 |
 | 2024-01-16 | v1-persona          | gpt-3.5-turbo      |           0.7 |       0.759519 |       0.630518 |    0.736527 |    0.620753 |  0.748023 |  0.625635 |
 | 2024-01-17 | v6                  | gpt-4-1106-preview |           1.2 |       0.817635 |       0.703687 |    0.762475 |    0.623341 |  0.790055 |  0.663514 |
+| 2024-01-17 | v7                  | gpt-4-1106-preview |           1.2 |       0.817635 |       0.712696 |    0.764471 |    0.633253 |  0.791053 |  0.672975 |
 
 ## Requirements
 - Python 3.11 or higher

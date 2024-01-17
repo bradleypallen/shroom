@@ -5,7 +5,7 @@
 
 ## Approach
 
-Given a datapoint from the validation data, we prompt a large language model to determine whether the input ("hyp") of the datapoint exhibits hallucination, arguing from the perspective of a task-specific persona. We perform temperature sampling and then assign a final classification by majority vote across multiple invocations of the model to compute a estimated probability that the datapoint exhibits hallucination.
+Given a datapoint from the validation data, we prompt a large language model to determine whether the output ("hyp") of the datapoint exhibits hallucination, arguing from the perspective of a task-specific persona. We perform temperature sampling and then assign a final classification by majority vote across multiple invocations of the model to compute a estimated probability that the datapoint exhibits hallucination.
 
 ## Versions
 
@@ -21,6 +21,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | v4 | Removed rationale generation | [shroom_classifier_v4.py](prod/shroom_classifier_v4.py) |
 | v4-persona | v4 with personas re-added (one per task) | [shroom_classifier_v4_persona.py](prod/shroom_classifier_v4_persona.py) |
 | v5 | Increased temperature sampling to 10 | [shroom_classifier_v5.py](prod/shroom_classifier_v5.py) |
+| v6 | Added reference instruction (whether to use target, input, or both to determine if output is a hallucination) | [shroom_classifier_v6.py](prod/shroom_classifier_v6.py) |
 
 ## Runs
 
@@ -43,6 +44,9 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-14 | v4-persona          | gpt-3.5-turbo      |           1.2 |       0.739479 |       0.585354 |    0.746507 |    0.615651 |  0.742993 |  0.600503 |
 | 2024-01-14 | v4-persona          | gpt-4-1106-preview |           1.2 |       0.815631 |       0.7101   |    0.766467 |    0.620185 |  0.791049 |  0.665143 |
 | 2024-01-15 | v5                  | gpt-4-1106-preview |           1.2 |       **0.835671** |       0.714804 |    0.762475 |    **0.629884** |  0.799073 |  0.672344 |
+| 2024-01-16 | v1-persona-examples | gpt-3.5-turbo      |           0.7 |       0.665331 |       0.490591 |    0.720559 |    0.509126 |  0.692945 |  0.499859 |
+| 2024-01-16 | v1-persona          | gpt-3.5-turbo      |           0.7 |       0.759519 |       0.630518 |    0.736527 |    0.620753 |  0.748023 |  0.625635 |
+| 2024-01-17 | v6                  | gpt-4-1106-preview |           1.2 |       0.823647 |       0.702125 |    0.766467 |    0.62461  |  0.795057 |  0.663367 |
 
 ## Requirements
 - Python 3.11 or higher

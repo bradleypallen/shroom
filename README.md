@@ -11,6 +11,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 
 | Name | Description | Source |
 | ---- | ----------- | ----------------- |
+| baseline | The baseline system provided by the competition organizers, "based on a simple prompt retrieval approach, derived from SelfCheck-GPT" | [SHROOM participant kit](https://drive.google.com/file/d/1Iv2jKa5XrNfQjzpFnc1WyNtN7AO59W99/view?usp=sharing) |
 | v1 | Initial port to LCEL | [shroom_classifier_v1.py](prod/shroom_classifier_v1.py) |
 | v1-persona | v1 with personas added | [shroom_classifier_v1_persona.py](prod/shroom_classifier_v1_persona.py) |
 | v1-persona-examples | v1 with personas and examples added | [shroom_classifier_v1_persona_examples.py](prod/shroom_classifier_v1_persona_examples.py) |
@@ -28,6 +29,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 
 | date       | version             | model              |   temperature |   agnostic_acc |   agnostic_rho |   aware_acc |   aware_rho |   avg_acc |   avg_rho |
 |:-----------|:--------------------|:-------------------|--------------:|---------------:|---------------:|------------:|------------:|----------:|----------:|
+| 2023-12-23 | baseline            | mistral-7b-instruct-v0.2.Q6_K |           0.0   |       0.649299 |       0.380141 |    0.706587 |    0.460958 |  0.677943 |  0.420549 |
 | 2024-01-09 | v1                  | gpt-3.5-turbo      |           0.7 |       0.725451 |       0.54904  |    0.712575 |    0.541777 |  0.719013 |  0.545408 |
 | 2024-01-09 | v1                  | gpt-4              |           0.7 |       0.801603 |       0.679521 |    0.762475 |    0.555941 |  0.782039 |  0.617731 |
 | 2024-01-10 | v1-persona-examples | gpt-3.5-turbo      |           0.7 |       0.671343 |       0.493688 |    0.712575 |    0.524608 |  0.691959 |  0.509148 |

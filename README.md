@@ -26,6 +26,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | v7 | Rearranged prompt to make it possible to insert demonstrations | [shroom_classifier_v7.py](prod/shroom_classifier_v7.py) |
 | v8 | Added demonstrations generated using Universal Self-Adaptive Prompting for classification task (K=6, 3 positive, 3 negative)| [shroom_classifier_v8.py](prod/shroom_classifier_v8.py) |
 | v9 | v8 with reduced number of demonstrations (K=2, 1 positive, 1 negative) | [shroom_classifier_v9.py](prod/shroom_classifier_v9.py) |
+| v10 | v9 with reference instruction set to "either" (because the "ref" field is not present in test datasets) | [shroom_classifier_v10.py](prod/shroom_classifier_v10.py) |
 
 ## Runs
 
@@ -58,6 +59,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-21 | v9                  | gpt-3.5-turbo                 |           1.2 |       0.763527 |       0.657147 |    0.778443 |    0.63507  |  0.770985 |  0.646109 |
 | 2024-01-21 | v9                  | gpt-4-1106-preview            |           1.2 |       0.815631 |       0.721391 |    0.778443 |    0.663652 |  0.797037 |  **0.692521** |
 | 2024-01-21 | v9                  | gpt-4                         |           1.2 |       0.815631 |       0.704865 |    0.778443 |    0.624686 |  0.797037 |  0.664775 |
+| 2024-01-21 | v10                 | gpt-4-1106-preview            |           1.2 |       0.825651 |       0.717516 |    0.768463 |    0.643263 |  0.797057 |  0.68039  |
 
 ## Requirements
 - Python 3.11 or higher

@@ -24,7 +24,8 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | v5 | Increased temperature sampling to 10 | [shroom_classifier_v5.py](prod/shroom_classifier_v5.py) |
 | v6 | Added reference instruction (whether to use target, input, or both to determine if output is a hallucination) | [shroom_classifier_v6.py](prod/shroom_classifier_v6.py) |
 | v7 | Rearranged prompt to make it possible to insert demonstrations | [shroom_classifier_v7.py](prod/shroom_classifier_v7.py) |
-| v8 | Added demonstrations generated using Universal Self-Adaptive Prompting for classification task | [shroom_classifier_v8.py](prod/shroom_classifier_v8.py) |
+| v8 | Added demonstrations generated using Universal Self-Adaptive Prompting for classification task (K=6, 3 positive, 3 negative)| [shroom_classifier_v8.py](prod/shroom_classifier_v8.py) |
+| v9 | v8 with reduced number of demonstrations (K=2, 1 positive, 1 negative) | [shroom_classifier_v9.py](prod/shroom_classifier_v9.py) |
 
 ## Runs
 
@@ -41,7 +42,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-11 | v1-conservative     | gpt-3.5-turbo      |           0.7 |       0.701403 |       0.540491 |    0.734531 |    0.568859 |  0.717967 |  0.554675 |
 | 2024-01-11 | v3                  | gpt-3.5-turbo      |           0.7 |       0.745491 |       0.584922 |    0.718563 |    0.508341 |  0.732027 |  0.546631 |
 | 2024-01-11 | v2                  | gpt-3.5-turbo      |           1.2 |       0.709419 |       0.519809 |    0.752495 |    0.582654 |  0.730957 |  0.551231 |
-| 2024-01-12 | v3                  | gpt-4              |           1.2 |       0.821643 |       **0.722481** |    0.782435 |    0.627895 |  **0.802039** |  **0.675188** |
+| 2024-01-12 | v3                  | gpt-4              |           1.2 |       0.821643 |       **0.722481** |    0.782435 |    0.627895 |  **0.802039** |  0.675188 |
 | 2024-01-13 | v3                  | gpt-3.5-turbo      |           1.5 |       0.717435 |       0.541716 |    0.708583 |    0.534737 |  0.713009 |  0.538226 |
 | 2024-01-13 | v3-persona          | gpt-3.5-turbo      |           1.2 |       0.757515 |       0.612149 |    0.736527 |    0.592091 |  0.747021 |  0.60212  |
 | 2024-01-13 | v4                  | gpt-3.5-turbo      |           1.2 |       0.743487 |       0.606295 |    0.748503 |    0.597773 |  0.745995 |  0.602034 |
@@ -54,6 +55,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-17 | v7                  | gpt-4-1106-preview |           1.2 |       0.817635 |       0.712696 |    0.764471 |    0.633253 |  0.791053 |  0.672975 |
 | 2024-01-20 | v8                  | gpt-4-1106-preview            |           1.2 |       0.779559 |       0.671776 |    **0.786427** |    **0.665739** |  0.782993 |  0.668757 |
 | 2024-01-20 | v8                  | gpt-3.5-turbo                 |           1.2 |       0.731463 |       0.591597 |    0.764471 |    0.602794 |  0.747967 |  0.597196 |
+| 2024-01-21 | v9                  | gpt-4-1106-preview            |           1.2 |       0.815631 |       0.721391 |    0.778443 |    0.663652 |  0.797037 |  **0.692521** |
 
 ## Requirements
 - Python 3.11 or higher

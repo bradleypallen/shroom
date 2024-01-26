@@ -27,6 +27,8 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | v8 | Added demonstrations generated using Universal Self-Adaptive Prompting for classification task (K=6, 3 positive, 3 negative)| [shroom_classifier_v8.py](prod/shroom_classifier_v8.py) |
 | v9 | v8 with reduced number of demonstrations (K=2, 1 positive, 1 negative) | [shroom_classifier_v9.py](prod/shroom_classifier_v9.py) |
 | v10 | v9 with reference instruction set to "either" (because the "ref" field is not present in test datasets) | [shroom_classifier_v10.py](prod/shroom_classifier_v10.py) |
+| v11 | v10 with minor textual changes to prompts, variable names | [shroom_classifier_v11.py](prod/shroom_classifier_v11.py) |
+| v12 | Introduce parameters to ShroomClassifier.classify() to support ablation study | [shroom_classifier_v12.py](prod/shroom_classifier_v12.py) |
 
 ## Runs
 
@@ -60,6 +62,18 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-21 | v9                  | gpt-4-1106-preview            |           1.2 |       0.815631 |       0.721391 |    0.778443 |    0.663652 |  0.797037 |  **0.692521** |
 | 2024-01-21 | v9                  | gpt-4                         |           1.2 |       0.815631 |       0.704865 |    0.778443 |    0.624686 |  0.797037 |  0.664775 |
 | 2024-01-21 | v10                 | gpt-4-1106-preview            |           1.2 |       0.825651 |       0.717516 |    0.768463 |    0.643263 |  0.797057 |  0.68039  |
+| 2024-01-24 | v11                                | gpt-4-1106-preview            |           1.2 |       0.819639 |       0.719553 |    0.756487 |    0.650001 |  0.788063 |  0.684777 |
+| 2024-01-25 | v12                                | gpt-3.5-turbo                 |           1.2 |       0.773547 |       0.652249 |    0.764471 |    0.605591 |  0.769009 |  0.62892  |
+| 2024-01-25 | v12                                | gpt-4-1106-preview            |           1.2 |       0.817635 |       0.721873 |    0.766467 |    0.651745 |  0.792051 |  0.686809 |
+| 2024-01-25 | v12-wo-examples-roles              | gpt-3.5-turbo                 |           1.2 |       0.749499 |       0.636    |    0.750499 |    0.611229 |  0.749999 |  0.623614 |
+| 2024-01-25 | v12-wo-examples-roles-tasks        | gpt-3.5-turbo                 |           1.2 |       0.721443 |       0.625697 |    0.708583 |    0.608013 |  0.715013 |  0.616855 |
+| 2024-01-25 | v12-wo-examples-roles-tasks-halluc | gpt-3.5-turbo                 |           1.2 |       0.745491 |       0.641905 |    0.736527 |    0.576088 |  0.741009 |  0.608996 |
+| 2024-01-25 | v12-wo-roles-tasks-halluc          | gpt-3.5-turbo                 |           1.2 |       0.759519 |       0.644577 |    0.762475 |    0.585752 |  0.760997 |  0.615165 |
+| 2024-01-25 | v12-wo-tasks-halluc                | gpt-3.5-turbo                 |           1.2 |       0.753507 |       0.632228 |    0.780439 |    0.626477 |  0.766973 |  0.629353 |
+| 2024-01-25 | v12-wo-tasks-role                  | gpt-3.5-turbo                 |           1.2 |       0.759519 |       0.651428 |    0.774451 |    0.614301 |  0.766985 |  0.632865 |
+| 2024-01-25 | v12-wo-role-hallu                  | gpt-3.5-turbo                 |           1.2 |       0.763527 |       0.635667 |    0.770459 |    0.598199 |  0.766993 |  0.616933 |
+| 2024-01-25 | v12-wo-examples                    | gpt-3.5-turbo                 |           1.2 |       0.739479 |       0.64282  |    0.744511 |    0.636529 |  0.741995 |  0.639674 |
+
 
 ## Requirements
 - Python 3.11 or higher

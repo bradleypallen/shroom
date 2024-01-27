@@ -29,6 +29,7 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | v10 | v9 with reference instruction set to "either" (because the "ref" field is not present in test datasets) | [shroom_classifier_v10.py](prod/shroom_classifier_v10.py) |
 | v11 | v10 with minor textual changes to prompts, variable names | [shroom_classifier_v11.py](prod/shroom_classifier_v11.py) |
 | v12 | Introduce parameters to ShroomClassifier.classify() to support ablation study | [shroom_classifier_v12.py](prod/shroom_classifier_v12.py) |
+| v13 | Dynamic selection of examples to support prompt optimization | [shroom_classifier_v13.py](prod/shroom_classifier_v13.py) |
 
 ## Runs
 
@@ -73,7 +74,11 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-25 | v12-wo-tasks-role                  | gpt-3.5-turbo                 |           1.2 |       0.759519 |       0.651428 |    0.774451 |    0.614301 |  0.766985 |  0.632865 |
 | 2024-01-25 | v12-wo-role-hallu                  | gpt-3.5-turbo                 |           1.2 |       0.763527 |       0.635667 |    0.770459 |    0.598199 |  0.766993 |  0.616933 |
 | 2024-01-25 | v12-wo-examples                    | gpt-3.5-turbo                 |           1.2 |       0.739479 |       0.64282  |    0.744511 |    0.636529 |  0.741995 |  0.639674 |
-
+| 2024-01-27 | v13-1-example-per-class            | gpt-3.5-turbo                 |           1.2 |       0.743487 |       0.650136 |    0.752495 |    0.636934 |  0.747991 |  0.643535 |
+| 2024-01-27 | v13-2-examples-per-class           | gpt-3.5-turbo                 |           1.2 |       0.721443 |       0.576513 |    0.734531 |    0.544549 |  0.727987 |  0.560531 |
+| 2024-01-27 | v13-3-examples-per-class           | gpt-3.5-turbo                 |           1.2 |       0.715431 |       0.55895  |    0.764471 |    0.581092 |  0.739951 |  0.570021 |
+| 2024-01-27 | v13-4-examples-per-class           | gpt-3.5-turbo                 |           1.2 |       0.737475 |       0.605604 |    0.766467 |    0.594896 |  0.751971 |  0.60025  |
+| 2024-01-27 | v13-5-examples-per-class           | gpt-3.5-turbo                 |           1.2 |       0.733467 |       0.582187 |    0.774451 |    0.622071 |  0.753959 |  0.602129 |
 
 ## Requirements
 - Python 3.11 or higher

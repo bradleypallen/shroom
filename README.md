@@ -79,6 +79,11 @@ Given a datapoint from the validation data, we prompt a large language model to 
 | 2024-01-27 | v13-3-examples-per-class           | gpt-3.5-turbo                 |           1.2 |       0.715431 |       0.55895  |    0.764471 |    0.581092 |  0.739951 |  0.570021 |
 | 2024-01-27 | v13-4-examples-per-class           | gpt-3.5-turbo                 |           1.2 |       0.737475 |       0.605604 |    0.766467 |    0.594896 |  0.751971 |  0.60025  |
 | 2024-01-27 | v13-5-examples-per-class           | gpt-3.5-turbo                 |           1.2 |       0.733467 |       0.582187 |    0.774451 |    0.622071 |  0.753959 |  0.602129 |
+| 2024-01-27 | v13-1-example-selection-1          | gpt-3.5-turbo                 |           1.2 |       0.717435 |       0.591981 |    0.734531 |    0.573175 |  0.725983 |  0.582578 |
+| 2024-01-27 | v13-1-example-selection-2          | gpt-3.5-turbo                 |           1.2 |       0.727455 |       0.613157 |    0.760479 |    0.590506 |  0.743967 |  0.601831 |
+| 2024-01-27 | v13-1-example-selection-3          | gpt-3.5-turbo                 |           1.2 |       0.741483 |       0.618108 |    0.754491 |    0.59735  |  0.747987 |  0.607729 |
+| 2024-01-27 | v13-1-example-selection-4          | gpt-3.5-turbo                 |           1.2 |       0.747495 |       0.642322 |    0.756487 |    0.623895 |  0.751991 |  0.633108 |
+
 
 ## Requirements
 - Python 3.11 or higher

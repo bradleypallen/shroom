@@ -80,6 +80,7 @@ Answer:
             "gpt-4",
             "gpt-3.5-turbo",
             "gpt-4-1106-preview",
+            "gpt-4-0125-preview",
             ]:
             return ChatOpenAI(model_name=model_name, temperature=temperature, request_timeout=100)
         else:
